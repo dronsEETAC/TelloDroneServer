@@ -1,0 +1,3 @@
+Ejecutar en modo administrados
+netstat -ano | findstr :8889
+taskkill /PID <pid> /F
