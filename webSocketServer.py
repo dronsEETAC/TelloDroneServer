@@ -52,7 +52,7 @@ async def handler(websocket, path):
             await websocket.send('done')
         elif command == 'Adelante':
             print ('Adelante')
-            drone.move_forward(50)
+            drone.move_forward(100)
             await websocket.send('done')
         elif command == 'GiraR':
             print('GiraR')
@@ -60,22 +60,22 @@ async def handler(websocket, path):
             await websocket.send('done')
         elif command == 'Izquierda':
             print('izquierda')
-            drone.move_left(50)
+            drone.move_left(100)
             await websocket.send('done')
         elif command == 'Flip':
             print('Flip')
             #drone.flip('l')
         elif command == 'Derecha':
             print('Derecha')
-            drone.move_right(50)
+            drone.move_right(100)
             await websocket.send('done')
         elif command == 'Arriba':
             print('Arriba')
-            drone.move_up(50)
+            drone.move_up(100)
             await websocket.send('done')
         elif command == 'Atras':
             print('Atras')
-            drone.move_back(50)
+            drone.move_back(100)
             await websocket.send('done')
         elif command == 'Abajo':
             print('Abajo')

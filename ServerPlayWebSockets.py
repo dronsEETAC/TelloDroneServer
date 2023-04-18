@@ -28,8 +28,9 @@ async def handler(websocket, path):
     global turn
     global numOp
     global sending_video_stream
+    global numPlayers
 
-    clients.append(websocket)
+
 
     while True:
         print ('waiting')
@@ -39,20 +40,25 @@ async def handler(websocket, path):
         command = splited[1]
 
         if command == 'play':
-            print('envio turno ', cont)
-            await websocket.send('yourTurn/'+str(cont))
+            if cont < numPlayers:
+                clients.append(websocket)
+                print('envio turno ', cont)
+                await websocket.send('yourTurn/'+str(cont))
 
-            if not connected:
-                print('connect')
-                sending_video_stream = True
-                y = threading.Thread(target=video_stream)
-                y.start()
+                if not connected:
+                    print('connect')
+                    sending_video_stream = True
+                    y = threading.Thread(target=video_stream)
+                    y.start()
 
 
-                connected = True
-                turn = cont
-                print('el turno es de ', turn)
-            cont = cont + 1
+                    connected = True
+                    turn = cont
+                    print('el turno es de ', turn)
+                cont = cont + 1
+            else:
+                await websocket.send('late/')
+
 
 
         else:
@@ -148,6 +154,7 @@ async def handler(websocket, path):
     #await websocket.send(reply)
 
 
+numPlayers = 2
 
 cont = 0
 connected = False
