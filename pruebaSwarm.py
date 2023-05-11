@@ -22,7 +22,10 @@ def SearchTellos():
     print('res: ', res)
     telloIPs = []
     for w in res:
-        if '60-60-1f-5d-bd-4d' in w:
+        if '60-60-1f-5d-bd-4d' in w or \
+                '60-60-1f-d3-e4-5e' in w or \
+                '60-60-1f-dc-32-88' in w :
+
             print (w.split()[0])
             telloIPs.append(w.split()[0])
 
@@ -30,6 +33,8 @@ def SearchTellos():
     swarm = TelloSwarm.fromIps(telloIPs)
 
     swarm.connect()
+    swarm.takeoff()
+    swarm.land()
 
 
 

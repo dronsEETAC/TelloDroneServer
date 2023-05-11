@@ -104,7 +104,7 @@ def on_message(client, userdata, message):
 
             elif command == 'Flip':
                 print('Flip')
-                # drone.flip('l')
+                drone.flip('l')
                 client.publish('serverplay/done')
 
             elif command == 'Derecha':
@@ -166,20 +166,17 @@ def on_message(client, userdata, message):
 
 
 
-def ServerPlay():
+def ServerRun(n):
     global cont
     global connected
     global numOp
     global numPlayers
     global drone
 
-
-    numPlayers = 2
-
+    numPlayers = n
     cont = 0
     connected = False
     numOp = 0
-
     drone = Tello()
     drone.connect()
     drone.streamon()
@@ -199,4 +196,4 @@ def ServerPlay():
     external_client.loop_forever()
 
 if __name__ == '__main__':
-    ServerPlay()
+    ServerRun()
