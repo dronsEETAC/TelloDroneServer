@@ -13,12 +13,32 @@ import paho.mqtt.client as mqtt
 def video_stream ():
     global drone
     global sending_video_stream
+    global rec
+    global out
+    global cap
+    global showFaces
+    face_cascade = cv.CascadeClassifier(cv.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+    rec = False
+    showFaces = False
 
     while True:
         if sending_video_stream:
-            img = drone.get_frame_read().frame
-            cv.imshow('frame', img)
+            ret, frame = cap.read()
+            if showFaces:
+                gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+                faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+
+                if len(faces) > 0:
+                    for (x, y, w, h) in faces:
+                        cv.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+
+            if rec:
+                out.write(frame)
+                cv.circle(frame, (30, 30), 20, (0, 0, 255), -1)
+            cv.imshow('video', frame)
             cv.waitKey(1)
+
 
 
 
@@ -30,6 +50,10 @@ def on_message(client, userdata, message):
     global turn
     global numOp
     global sending_video_stream
+    global rec
+    global out
+    global cap
+    global showFaces
 
 
     splited = message.topic.split("/")
@@ -40,6 +64,7 @@ def on_message(client, userdata, message):
     if command == 'connect':
         drone.connect()
         drone.streamon()
+        cap = cv.VideoCapture('udp://0.0.0.0:11111')
         sending_video_stream = True
         y = threading.Thread(target=video_stream)
         y.start()
@@ -114,6 +139,33 @@ def on_message(client, userdata, message):
         drone.land()
 
         client.publish('serverOneDrone/onHearth')
+    elif command == 'takePic':
+        print('takePic')
+        #img = drone.get_frame_read().frame
+        ret, img = cap.read()
+        #cv.imshow('pic', img)
+        #cv.waitKey(1)
+        t = time.localtime()
+        timestamp = time.strftime('%b-%d-%Y_%H%M%S', t)
+        name = 'pictures/' + timestamp + '.jpg'
+        cv.imwrite(name, img)
+    elif command == 'startREC':
+        t = time.localtime()
+        timestamp = time.strftime('%b-%d-%Y_%H%M%S', t)
+        fourcc = cv.VideoWriter_fourcc(*'mp4v')
+        out= cv.VideoWriter('videos/'+timestamp+'.mp4', fourcc, 20.0, (960, 720))
+        rec = True
+    elif command == 'stopREC':
+        rec = False
+        out.release()
+    elif command == 'showFaces':
+        print ('show faces')
+        showFaces = True
+    elif command == 'removeFaces':
+        print ('remove faces')
+        showFaces = False
+
+
 
 
     if connected:

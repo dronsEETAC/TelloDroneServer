@@ -25,7 +25,7 @@ def play ():
     if startOneDroneButton is not None:
         startOneDroneButton.place_forget()
 
-    image = Image.open("play.png")
+    image = Image.open("assets/play.png")
     image = image.resize((600, 500), Image.ANTIALIAS)
     bg = ImageTk.PhotoImage(image)
     canvas.create_image(0, 0, image=bg, anchor="nw")
@@ -55,7 +55,7 @@ def oneDron ():
 
 
 
-    image = Image.open("oneDrone.png")
+    image = Image.open("assets/oneDrone.png")
     image = image.resize((600, 500), Image.ANTIALIAS)
     bg = ImageTk.PhotoImage(image)
     canvas.create_image(0, 0, image=bg, anchor="nw")
@@ -78,7 +78,7 @@ playBtn = Button(root, text="play", bg='#F57328', fg="white",
                      command=play)
 playBtn.grid(row=1, column=0, padx=5, pady=5, sticky=N + S + E + W)
 
-image = Image.open("presentation.png")
+image = Image.open("assets/presentation.png")
 image = image.resize((700, 500), Image.ANTIALIAS)
 bg = ImageTk.PhotoImage(image)
 canvas = Canvas(root, width=700, height=500)
